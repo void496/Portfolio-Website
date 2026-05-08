@@ -181,7 +181,6 @@
     .project-thumb.ui-bg   { background: linear-gradient(135deg, #0d1520, #0a1828); }
     .project-thumb.code-bg { background: linear-gradient(135deg, #0d1a14, #0a1520); }
     .project-thumb.api-bg  { background: linear-gradient(135deg, #1a0d20, #120a28); }
-    .project-thumb.api-bg  { background: linear-gradient(135deg, #1a0d20, #120a28); }
     .project-thumb::before {
       content: ''; position: absolute; inset: 0;
       background-image:
@@ -215,14 +214,50 @@
       display: flex; align-items: center; justify-content: center;
       width: 52px; height: 52px; border-radius: 12px;
       background: var(--surface-2); border: 1px solid var(--border);
-      color: var(--muted); text-decoration: none;
+      color: var(--muted); text-decoration: none; cursor: pointer;
       transition: color 0.25s, border-color 0.25s, background 0.25s, transform 0.2s;
+      position: relative;
     }
     .social-link:hover {
       color: var(--cyan); border-color: rgba(0,220,255,0.35);
       background: rgba(0,220,255,0.06); transform: translateY(-3px);
     }
     .social-link svg { width: 20px; height: 20px; fill: currentColor; }
+
+    /* Discord copy tooltip */
+    .social-link .tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--surface-2);
+      border: 1px solid rgba(0,220,255,0.3);
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      padding: 0.3rem 0.65rem;
+      border-radius: 6px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+    .social-link .tooltip::after {
+      content: '';
+      position: absolute;
+      top: 100%; left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: rgba(0,220,255,0.3);
+    }
+    .social-link:hover .tooltip { opacity: 1; }
+    .social-link.copied .tooltip {
+      opacity: 1;
+      color: #00ff88;
+      border-color: rgba(0,255,136,0.4);
+    }
+
     .contact-email {
       font-family: var(--font-mono); font-size: 0.82rem; color: var(--muted);
       letter-spacing: 0.06em; text-decoration: none;
@@ -364,14 +399,16 @@
           <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
         </a>
 
-        <!-- Discord -->
-        <a href="void0698." target="_blank" rel="noopener" class="social-link" title="Discord">
+        <!-- Discord — copies username to clipboard (Discord doesn't support direct profile links) -->
+        <button class="social-link" id="discord-btn" title="Discord">
           <svg viewBox="0 0 24 24"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-        </a>
+          <span class="tooltip" id="discord-tooltip">void0698.</span>
+        </button>
 
       </div>
 
-      <a href="anjana32123@gmail.com" class="contact-email">anjana32123@gmail.com</a>
+      <!-- FIX: added mailto: prefix so clicking opens mail client -->
+      <a href="mailto:anjana32123@gmail.com" class="contact-email">anjana32123@gmail.com</a>
     </div>
   </section>
 
@@ -382,6 +419,23 @@
   <span>Built with <a href="#">care</a> &amp; caffeine</span>
 </footer>
 
+<!-- Discord copy-to-clipboard -->
+<script>
+  const discordBtn = document.getElementById('discord-btn');
+  const discordTip = document.getElementById('discord-tooltip');
+  discordBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText('void0698.').then(() => {
+      discordTip.textContent = 'Copied!';
+      discordBtn.classList.add('copied');
+      setTimeout(() => {
+        discordTip.textContent = 'void0698.';
+        discordBtn.classList.remove('copied');
+      }, 2000);
+    });
+  });
+</script>
+
+<!-- ── THREE.JS CUBE (ES Module) ── -->
 <script type="module">
   import * as THREE from 'three';
 
@@ -558,16 +612,14 @@
     raycaster.setFromCamera(mouse, camera);
     const hit = raycaster.intersectObjects(faces).length > 0;
     if (hit && state === 'idle') {
-      state = 'hovered';
-      expandFaces();
+      state = 'hovered'; expandFaces();
       renderer.domElement.style.cursor = 'pointer';
     }
   }
 
   function onCanvasMouseLeave() {
     if (state === 'hovered') {
-      state = 'idle';
-      collapseFaces();
+      state = 'idle'; collapseFaces();
       renderer.domElement.style.cursor = 'default';
     }
   }
@@ -596,14 +648,12 @@
       onUpdate() { cubeGroup.quaternion.slerpQuaternions(startQuat, targetQuat, prog.t); },
       onComplete() { cubeGroup.rotation.setFromQuaternion(cubeGroup.quaternion); },
     });
-    gsap.killTweensOf(face.position);
-    gsap.killTweensOf(face.scale);
+    gsap.killTweensOf(face.position); gsap.killTweensOf(face.scale);
     gsap.to(face.position, { x: face.userData.normal.x * INSPECT_DIST, y: face.userData.normal.y * INSPECT_DIST, z: face.userData.normal.z * INSPECT_DIST, duration: 0.75, ease: 'power2.out' });
     gsap.to(face.scale, { x: INSPECT_SCALE, y: INSPECT_SCALE, z: 1, duration: 0.75, ease: 'power2.out' });
     faces.forEach(f => {
       if (f === face) return;
-      gsap.killTweensOf(f.position);
-      gsap.killTweensOf(f.material);
+      gsap.killTweensOf(f.position); gsap.killTweensOf(f.material);
       gsap.to(f.position, { x: f.userData.origPos.x, y: f.userData.origPos.y, z: f.userData.origPos.z, duration: 0.55, ease: 'power2.inOut' });
       gsap.to(f.material, { opacity: DIM_OPACITY, duration: 0.4 });
     });
@@ -661,7 +711,6 @@
     isDragging = false;
     renderer.domElement.style.cursor = state === 'hovered' ? 'pointer' : 'default';
   }
-
   function onTouchStart(e) {
     if (state === 'inspecting') { resetToIdle(); return; }
     const t = e.touches[0];
@@ -682,7 +731,6 @@
     isDragging = false;
     if (state === 'hovered') { state = 'idle'; collapseFaces(); }
   }
-
   function onResize() {
     const { w, h } = heroSize();
     camera.aspect = w / h;
